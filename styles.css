@@ -1,17 +1,19 @@
 #board {
   position: relative;
-  margin: 0 auto;
+  margin: 0;
   aspect-ratio: 1/1;
-  height: calc((50svh + 50svw) / 2);
   flex-shrink: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
-
 #board-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 800px;
   width: 800px;
+  border: 2px black solid;
 }
 
 .row{
