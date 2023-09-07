@@ -11,17 +11,38 @@ const boardLocatorInfo = {
   tileSize: 0
 }
 
-updateBoard(10, 20);
-
-function tileAtPxLocation(x, y) {
+export function tileAtPxLocation(x, y) {
   const upperBound = boardLocatorInfo.y;
-  const lowerBound = upperBound - (boardLocatorInfo.tileSize * boardLocatorInfo.height);
+  const lowerBound = upperBound + (boardLocatorInfo.tileSize * boardLocatorInfo.height);
 
   const leftBound = boardLocatorInfo.x;
   const rightBound = boardLocatorInfo.x + (boardLocatorInfo.tileSize * boardLocatorInfo.width)
-}
+  
+  if(((x < leftBound) || (x > rightBound)) || ((y < upperBound) || (y > lowerBound))) {
+    return null;
+  }
+  const relX = x - boardLocatorInfo.x;
+  const relY = y - boardLocatorInfo.y;
+  
+  const tileIndexX = Math.ceil(relX / boardLocatorInfo.tileSize) - 1;
+  const tileIndexY = Math.ceil(relY / boardLocatorInfo.tileSize) - 1;
 
-function updateBoard(height, width){
+  return(
+    {
+      tileIndexX,
+      tileIndexY
+    }
+  )
+};
+
+export function updateTile (tileIndexX, tileIndexY) {
+  const tile = tiles[tileIndexY][tileIndexX].tile;
+  if (tile) {
+    tile.style.backgroundColor = 'green';
+  }
+};
+
+export function updateBoard(height, width){
   const sizeLimit = Math.floor(height >= width ? boardContainer.offsetHeight / height : boardContainer.offsetWidth / width) - 7;
   console.log(sizeLimit);
   board.style.height = `${(sizeLimit + 2) * height}px`;
@@ -55,4 +76,4 @@ function updateBoard(height, width){
   }
   console.log(tiles);
   console.log(boardLocatorInfo);
-}
+};
