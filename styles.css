@@ -1,3 +1,27 @@
+@font-face {
+  font-family: 'msserif'; /* The name you want to give to the font */
+  src: url('ms-sans-serif-1.ttf') format('truetype'); /* Specify the path to your TTF font file */
+  /* You can also include other font formats (e.g., woff, woff2) for better cross-browser compatibility */
+}
+
+body {
+  background-color: hsl(126,40%,81%);
+  font-family: 'msserif';
+}
+img {
+  position: absolute;
+}
+
+.caption {
+  position: absolute;
+  font-size: 20px;
+  top: -3px;
+  left: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: hsl(126,40%,81%);
+  color: #6a8485;
+}
 #board {
   position: relative;
   margin: 0;
@@ -8,12 +32,14 @@
   justify-content: flex-start;
 }
 #board-container {
+  box-shadow: 2px 2px 1px #555 inset;
+
   display: flex;
   align-items: center;
   justify-content: center;
   height: 800px;
   width: 800px;
-  border: 2px black solid;
+  border: 2px #6a8485 solid;
 }
 
 .row{
@@ -23,8 +49,11 @@
 }
 
 .tile {
+  display: flex;
   flex: auto;
   height: 100%;
   aspect-ratio: 1;
-  border: grey solid 1px;
+  border: #8c8c8b solid 0.9999px;
+  justify-content: center;
+  align-items: center;
 }

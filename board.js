@@ -10,20 +10,20 @@ const boardLocatorInfo = {
   width: 0,
   tileSize: 0
 }
-
+console.log(boardLocatorInfo);
 export function tileAtPxLocation(x, y) {
   const upperBound = boardLocatorInfo.y;
   const lowerBound = upperBound + (boardLocatorInfo.tileSize * boardLocatorInfo.height);
 
   const leftBound = boardLocatorInfo.x;
   const rightBound = boardLocatorInfo.x + (boardLocatorInfo.tileSize * boardLocatorInfo.width)
-  
+
   if(((x < leftBound) || (x > rightBound)) || ((y < upperBound) || (y > lowerBound))) {
     return null;
   }
   const relX = x - boardLocatorInfo.x;
   const relY = y - boardLocatorInfo.y;
-  
+
   const tileIndexX = Math.ceil(relX / boardLocatorInfo.tileSize) - 1;
   const tileIndexY = Math.ceil(relY / boardLocatorInfo.tileSize) - 1;
 
@@ -38,7 +38,11 @@ export function tileAtPxLocation(x, y) {
 export function updateTile (tileIndexX, tileIndexY) {
   const tile = tiles[tileIndexY][tileIndexX].tile;
   if (tile) {
-    tile.style.backgroundColor = 'green';
+    console.log('hi');
+    const img = document.createElement('img');
+    img.src = 'kara.png';
+    img.style.height = `${boardLocatorInfo.tileSize -10}px`;
+    tile.appendChild(img);
   }
 };
 
@@ -58,7 +62,7 @@ export function updateBoard(height, width){
         tileRow.push(
           {
             tile: item,
-            current: [0]
+            current: []
           }
         );
     }
