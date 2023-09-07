@@ -1,13 +1,8 @@
 import { tileAtPxLocation, updateBoard, updateTile } from "./board.js";
 
 const kara = document.getElementById('kara');
+
 let karaPlaced = false;
-
-const rect = kara.getBoundingClientRect();
-const karaOriginalPostionTop = rect.top;
-const karaOriginalPostionLeft = rect.left;
-console.log(karaOriginalPostionTop, karaOriginalPostionLeft)
-
 let isDragging = false;
 let offsetX, offsetY;
 
@@ -40,12 +35,12 @@ kara.addEventListener("dragend", (e) => {
       kara.style.cursor = "pointer";
 
       // Restore kara's original position
-      kara.style.left = `${karaOriginalPostionLeft}px`;
-      kara.style.top = `${karaOriginalPostionTop}px`;
+      kara.style.left = 'auto';
+      kara.style.top = 'auto';
 
       isDragging = false;
     }
-    const coords = tileAtPxLocation(event.clientX, event.clientY);
+    const coords = tileAtPxLocation(e.clientX, e.clientY);
     if (coords) {
       updateTile(coords.tileIndexX, coords.tileIndexY);
     }
@@ -53,4 +48,4 @@ kara.addEventListener("dragend", (e) => {
   }
 });
 
-updateBoard(10, 20);
+updateBoard(8, 8);
