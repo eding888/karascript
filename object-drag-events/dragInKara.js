@@ -1,4 +1,4 @@
-import { tileAtPxLocation, updateBoard, updateTile } from "./board.js";
+import { tileAtPxLocation, updateBoard, updateTile } from "../board.js";
 
 const kara = document.getElementById('kara');
 
@@ -41,11 +41,16 @@ kara.addEventListener("dragend", (e) => {
       isDragging = false;
     }
     const coords = tileAtPxLocation(e.clientX, e.clientY);
+    console.log(e.clientY);
+    console.log(coords);
     if (coords) {
-      updateTile(coords.tileIndexX, coords.tileIndexY);
+      karaPlaced = true;
+      updateTile(coords.tileIndexX, coords.tileIndexY, 'add', 'kara');
     }
-    karaPlaced = true;
+
+  } else {
+    window.alert('Kara has already been placed.');
   }
 });
 
-updateBoard(8, 8);
+updateBoard(5, 5);

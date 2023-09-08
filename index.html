@@ -4,10 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KaraScript</title>
+  <link rel="icon" type="image/png" href="./icons/kara.png">
   <link rel="stylesheet" href="styles.css"/>
   <script src="board.js" type="module" defer></script>
-  <link rel="icon" type="image/png" href="kara.png">
-  <script src="dragInNewObject.js" type="module" defer></script>
+  <script src="./object-drag-events/dragInKara.js" type="module" defer></script>
+  <script src="./object-drag-events/dragInMushroom.js" type="module" defer></script>
+  <script src="./object-drag-events/dragInLeaf.js" type="module" defer></script>
+  <script src="./object-drag-events/dragInTree.js" type="module" defer></script>
 </head>
 <body>
   <div id = 'board-container'>
@@ -15,9 +18,12 @@
     <div id = 'board'>
     </div>
   </div>
-  <div id = 'objects'>
+  <div id = 'objects-box'>
     <div class = 'caption'>Objects</div>
-    <img id = 'kara' src="kara.png" draggable="true"/>
+      <img id = 'kara' src="./icons/kara.png" draggable="true"/>
+      <img id = 'mushroom' src="./icons/mushroom.png" draggable="true"/>
+      <img id = 'leaf' src="./icons/leaf.png" draggable="true"/>
+      <img id = 'tree' src="./icons/tree.png" draggable="true"/>
   </div>
   
 </body>

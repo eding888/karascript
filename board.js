@@ -35,14 +35,93 @@ export function tileAtPxLocation(x, y) {
   )
 };
 
-export function updateTile (tileIndexX, tileIndexY) {
+function checkForRepeats(tileIndexX, tileIndexY, theoreticalObject) {
+  console.log(tiles[tileIndexY][tileIndexX].current);
+  const instances = [0, 0, 0, 0];
+  for (let i = 0; i< tiles[tileIndexY][tileIndexX].current.length; i++) {
+    switch (tiles[tileIndexY][tileIndexX].current[i]) {
+      case 1:
+        instances[0] +=1;
+        break;
+      case 2:
+        instances[1] +=1;
+        break;
+      case 3:
+        instances[2] +=1;
+        break;
+      case 4:
+        instances[3] +=1;
+        break;
+      default:
+        break;
+    }
+  }
+  switch (theoreticalObject) {
+    case 'kara':
+      instances[0] += 1
+      break;
+    case 'mushroom':
+      instances[1] += 1
+      break;
+    case 'leaf':
+      instances[2] += 1
+      break;
+    case 'tree':
+      instances[3] += 1
+      break;
+    default:
+      break;
+  }
+  let objectsCount = 0;
+  for(let i = 0; i < instances.length; i++) {
+    if(instances[i] === 1){
+      objectsCount += 1;
+    }
+    if (instances[i] > 1) {
+      return true;
+    }
+  };
+  if ((objectsCount > 1) && !(instances[0] === 1 && instances[1] === 0 && instances[2] === 1 && instances[3] === 0)) {
+    return true;
+  }
+  return false;
+}
+
+export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
   const tile = tiles[tileIndexY][tileIndexX].tile;
   if (tile) {
-    console.log('hi');
-    const img = document.createElement('img');
-    img.src = 'kara.png';
-    img.style.height = `${boardLocatorInfo.tileSize -10}px`;
-    tile.appendChild(img);
+    if(operation === 'add' && object) {
+      if(checkForRepeats(tileIndexX, tileIndexY, object)){
+        return false;
+      }
+      const img = document.createElement('img');
+      img.classList.add('tile-object');
+      img.style.height = `${boardLocatorInfo.tileSize}px`
+      switch (object) {
+        case 'kara':
+          img.src = './icons/kara.png';
+          tiles[tileIndexY][tileIndexX].current.push(1);
+          break;
+        case 'mushroom':
+          console.log('hi');
+          img.src = './icons/mushroom.png';
+          tiles[tileIndexY][tileIndexX].current.push(2);
+          break;
+        case 'leaf':
+          img.src = './icons/leaf.png';
+          tiles[tileIndexY][tileIndexX].current.push(3);
+          break;
+        case 'tree':
+          img.src = './icons/tree.png';
+          tiles[tileIndexY][tileIndexX].current.push(4);
+          break;
+        default:
+          break;
+      }
+      img.style.height = `${boardLocatorInfo.tileSize -10}px`;
+      console.log(tiles);
+      tile.appendChild(img);
+    }
   }
 };
 

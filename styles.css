@@ -8,8 +8,9 @@ body {
   background-color: hsl(126,40%,81%);
   font-family: 'msserif';
 }
+
 img {
-  position: absolute;
+  cursor: pointer;
 }
 
 .caption {
@@ -41,10 +42,12 @@ img {
   width: 800px;
   border: 2px #6a8485 solid;
 }
-
 #objects {
   display: flex;
-  justify-content: space-between;
+}
+#objects-box {
+  display: flex;
+  justify-content: space-around;
   align-items: center;
   margin-top: 30px;
   position: relative;
@@ -67,11 +70,17 @@ img {
   align-items: center;
 }
 .tile {
-  display: flex;
+  position: relative;
   flex: auto;
   height: 100%;
   aspect-ratio: 1;
   border: #8c8c8b solid 0.9999px;
   justify-content: center;
   align-items: center;
+}
+.tile-object{
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
