@@ -53,4 +53,4 @@ kara.addEventListener("dragend", (e) => {
   }
 });
 
-updateBoard(5, 5);
+updateBoard(10, 10);

@@ -36,7 +36,6 @@ export function tileAtPxLocation(x, y) {
 };
 
 function checkForRepeats(tileIndexX, tileIndexY, theoreticalObject) {
-  console.log(tiles[tileIndexY][tileIndexX].current);
   const instances = [0, 0, 0, 0];
   for (let i = 0; i< tiles[tileIndexY][tileIndexX].current.length; i++) {
     switch (tiles[tileIndexY][tileIndexX].current[i]) {
@@ -101,6 +100,7 @@ export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
         case 'kara':
           img.src = './icons/kara.png';
           tiles[tileIndexY][tileIndexX].current.push(1);
+          img.style.zIndex = 99;
           break;
         case 'mushroom':
           console.log('hi');
@@ -109,6 +109,7 @@ export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
           break;
         case 'leaf':
           img.src = './icons/leaf.png';
+          img.style.zIndex = 0;
           tiles[tileIndexY][tileIndexX].current.push(3);
           break;
         case 'tree':
@@ -118,6 +119,12 @@ export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
         default:
           break;
       }
+      img.addEventListener('click', () => {
+        tiles[tileIndexY][tileIndexX].current = [];
+        while (tiles[tileIndexY][tileIndexX].tile.firstChild) {
+          tiles[tileIndexY][tileIndexX].tile.removeChild(tiles[tileIndexY][tileIndexX].tile.firstChild);
+      }
+      })
       img.style.height = `${boardLocatorInfo.tileSize -10}px`;
       console.log(tiles);
       tile.appendChild(img);

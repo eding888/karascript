@@ -42,24 +42,28 @@ img {
   width: 800px;
   border: 2px #6a8485 solid;
 }
-#objects {
+#controls{
   display: flex;
+  gap: 30px;
 }
+
 #objects-box {
   display: flex;
   justify-content: space-around;
   align-items: center;
   margin-top: 30px;
   position: relative;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   padding-left: 15px;
   padding-right: 15px;
-  width: 200px;
+  width: 250px;
   border: 2px #6a8485 solid;
   box-shadow: 2px 2px 1px #555 inset;
 }
-
+.arrows {
+  height: 40px;
+}
 .row{
   display: flex;
   flex: auto;
