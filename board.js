@@ -1,16 +1,19 @@
 const board = document.getElementById('board');
 const boardContainer = document.getElementById('board-container');
+import { changeKaraPlaced } from "../kara.js";
 
 const tiles = [];
 
-const boardLocatorInfo = {
+let firstRow = null;
+
+export const boardLocatorInfo = {
   x: 0,
   y: 0,
   height: 0,
   width: 0,
   tileSize: 0
 }
-console.log(boardLocatorInfo);
+
 export function tileAtPxLocation(x, y) {
   const upperBound = boardLocatorInfo.y;
   const lowerBound = upperBound + (boardLocatorInfo.tileSize * boardLocatorInfo.height);
@@ -35,7 +38,7 @@ export function tileAtPxLocation(x, y) {
   )
 };
 
-function checkForRepeats(tileIndexX, tileIndexY, theoreticalObject) {
+export function checkForRepeats(tileIndexX, tileIndexY, theoreticalObject) {
   const instances = [0, 0, 0, 0];
   for (let i = 0; i< tiles[tileIndexY][tileIndexX].current.length; i++) {
     switch (tiles[tileIndexY][tileIndexX].current[i]) {
@@ -83,6 +86,9 @@ function checkForRepeats(tileIndexX, tileIndexY, theoreticalObject) {
   if ((objectsCount > 1) && !(instances[0] === 1 && instances[1] === 0 && instances[2] === 1 && instances[3] === 0)) {
     return true;
   }
+  if ((objectsCount > 1) && (instances[0] === 1 && instances[1] === 1 && instances[2] === 0 && instances[3] === 0)) {
+    return 'shroom';
+  }
   return false;
 }
 
@@ -120,10 +126,11 @@ export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
           break;
       }
       img.addEventListener('click', () => {
+        changeKaraPlaced(false);
         tiles[tileIndexY][tileIndexX].current = [];
         while (tiles[tileIndexY][tileIndexX].tile.firstChild) {
           tiles[tileIndexY][tileIndexX].tile.removeChild(tiles[tileIndexY][tileIndexX].tile.firstChild);
-      }
+        }
       })
       img.style.height = `${boardLocatorInfo.tileSize -10}px`;
       console.log(tiles);
@@ -157,6 +164,7 @@ export function updateBoard(height, width){
     board.appendChild(row);
     if (i === 0) {
       const rect = row.getBoundingClientRect();
+      firstRow = row;
       boardLocatorInfo.x = rect.x;
       boardLocatorInfo.y = rect.y;
       boardLocatorInfo.height = height;
@@ -167,3 +175,10 @@ export function updateBoard(height, width){
   console.log(tiles);
   console.log(boardLocatorInfo);
 };
+
+let lastScroll = window.scrollY;
+window.addEventListener("scroll", () => {
+  boardLocatorInfo.y -= window.scrollY - lastScroll;
+  lastScroll = window.scrollY;
+  console.log(boardLocatorInfo.y);
+});

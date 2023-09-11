@@ -1,8 +1,8 @@
 import { tileAtPxLocation, updateBoard, updateTile } from "../board.js";
+import { karaPlaced, changeKaraPlaced, changeKaraLocation } from "../kara.js";
 
 const kara = document.getElementById('kara');
 
-let karaPlaced = false;
 let isDragging = false;
 let offsetX, offsetY;
 
@@ -29,6 +29,7 @@ kara.addEventListener("drag", (e) => {
 });
 
 kara.addEventListener("dragend", (e) => {
+  console.log(karaPlaced);
   if(!karaPlaced) {
     if (isDragging) {
       // Reset cursor style
@@ -41,10 +42,9 @@ kara.addEventListener("dragend", (e) => {
       isDragging = false;
     }
     const coords = tileAtPxLocation(e.clientX, e.clientY);
-    console.log(e.clientY);
-    console.log(coords);
     if (coords) {
-      karaPlaced = true;
+      changeKaraPlaced(true);
+      changeKaraLocation(coords.tileIndexX, coords.tileIndexY);
       updateTile(coords.tileIndexX, coords.tileIndexY, 'add', 'kara');
     }
 
