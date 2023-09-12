@@ -14,6 +14,15 @@ export const boardLocatorInfo = {
   tileSize: 0
 }
 
+export function eraseAndRedraw(targetX, targetY, newX, newY, newObject) {
+  while (tiles[targetY][targetX].tile.firstChild) {
+    tiles[targetY][targetX].tile.removeChild(tiles[targetY][targetX].tile.firstChild);
+  }
+  tiles[targetY][targetX].current = [];
+
+  updateTile(newX, newY, 'add', newObject);
+};
+
 export function tileAtPxLocation(x, y) {
   const upperBound = boardLocatorInfo.y;
   const lowerBound = upperBound + (boardLocatorInfo.tileSize * boardLocatorInfo.height);
@@ -40,6 +49,9 @@ export function tileAtPxLocation(x, y) {
 
 export function checkForRepeats(tileIndexX, tileIndexY, theoreticalObject) {
   const instances = [0, 0, 0, 0];
+  if (!tiles[tileIndexY][tileIndexX]) {
+    return false;
+  };
   for (let i = 0; i< tiles[tileIndexY][tileIndexX].current.length; i++) {
     switch (tiles[tileIndexY][tileIndexX].current[i]) {
       case 1:
@@ -176,9 +188,11 @@ export function updateBoard(height, width){
   console.log(boardLocatorInfo);
 };
 
-let lastScroll = window.scrollY;
+let lastScrollY = window.scrollY;
+let lastScrollX = window.scrollX;
 window.addEventListener("scroll", () => {
-  boardLocatorInfo.y -= window.scrollY - lastScroll;
-  lastScroll = window.scrollY;
-  console.log(boardLocatorInfo.y);
+  boardLocatorInfo.y -= window.scrollY - lastScrollY;
+  boardLocatorInfo.x -= window.scrollX - lastScrollX;
+  lastScrollY = window.scrollY;
+  lastScrollX = window.scrollX;
 });

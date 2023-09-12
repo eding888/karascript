@@ -44,6 +44,7 @@ kara.addEventListener("dragend", (e) => {
     const coords = tileAtPxLocation(e.clientX, e.clientY);
     if (coords) {
       changeKaraPlaced(true);
+      console.log(coords);
       changeKaraLocation(coords.tileIndexX, coords.tileIndexY);
       updateTile(coords.tileIndexX, coords.tileIndexY, 'add', 'kara');
     }

@@ -1,12 +1,19 @@
-import { checkForRepeats } from "./board";
-import { getKaraX, getKaraY } from "./kara";
-import { boardLocatorInfo } from "./board";
-export const moveKara = (direction) => {
+import { checkForRepeats, boardLocatorInfo, eraseAndRedraw } from "./board.js";
+import { getKaraX, getKaraY, getDirection, changeKaraLocation } from "./kara.js";
+
+const upArrow = document.getElementById('upArrow');
+
+upArrow.addEventListener('click', () => {
+  moveKaraForward();
+});
+
+export const moveKaraForward = () => {
   // 0 - north
   // 1 - east
   // 2 - south
   // 3 - west
   const directionOffset = [0, 0, 0, 0];
+  const direction = getDirection();
   switch (direction) {
     case 0:
       directionOffset[0] += 1
@@ -25,9 +32,12 @@ export const moveKara = (direction) => {
       break;
   }
   const x = getKaraX() + directionOffset[1] - directionOffset[3];
-  const y =  getKaraY() + directionOffset[0] - directionOffset[4];
+  const y =  getKaraY() + directionOffset[0] - directionOffset[2];
+  console.log(x, y);
+  eraseAndRedraw(getKaraX(), getKaraY(), x, y, 'kara');
+  changeKaraLocation(x, y);
 
   //if(x > boardLocatorInfo.)
 
-  const repeat = checkForRepeats()
+  //const repeat = checkForRepeats()
 }
