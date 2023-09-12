@@ -1,6 +1,7 @@
 const board = document.getElementById('board');
 const boardContainer = document.getElementById('board-container');
-import { changeKaraPlaced } from "../kara.js";
+import { changeKaraPlaced, getDirection } from "../kara.js";
+import { getKaraX, getKaraY } from "./kara.js";
 
 const tiles = [];
 
@@ -22,6 +23,32 @@ export function eraseAndRedraw(targetX, targetY, newX, newY, newObject) {
 
   updateTile(newX, newY, 'add', newObject);
 };
+
+export function correctKaraRotation() {
+  let angle = 0;
+  const x = getKaraX();
+  const y = getKaraY();
+  if (tiles[y][x].tile.firstChild) {
+    console.log(getDirection());
+    switch (getDirection()) {
+      case 0:
+        angle = 270;
+        break;
+      case 1:
+        angle = 0;
+        break;
+      case 2:
+        angle = 90;
+        break;
+      case 3:
+        angle = 180;
+        break;
+      default:
+        break;
+    }
+    tiles[y][x].tile.firstChild.style.transform = `rotate(${angle}deg)`;
+  }
+}
 
 export function tileAtPxLocation(x, y) {
   const upperBound = boardLocatorInfo.y;
