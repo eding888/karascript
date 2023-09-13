@@ -15,12 +15,11 @@ export const boardLocatorInfo = {
   tileSize: 0
 }
 
+export function objectAt(x, y) {
+  return tiles[y][x].current;
+}
 export function eraseAndRedraw(targetX, targetY, newX, newY, newObject) {
-  while (tiles[targetY][targetX].tile.firstChild) {
-    tiles[targetY][targetX].tile.removeChild(tiles[targetY][targetX].tile.firstChild);
-  }
-  tiles[targetY][targetX].current = [];
-
+  updateTile(targetX, targetY, newObject === 'kara' ? 'removeKaraOnly' : 'remove');
   updateTile(newX, newY, 'add', newObject);
 };
 
@@ -28,7 +27,8 @@ export function correctKaraRotation() {
   let angle = 0;
   const x = getKaraX();
   const y = getKaraY();
-  if (tiles[y][x].tile.firstChild) {
+  const karaId = tiles[y][x].tile.querySelector('#kara');
+  if (karaId) {
     console.log(getDirection());
     switch (getDirection()) {
       case 0:
@@ -46,7 +46,7 @@ export function correctKaraRotation() {
       default:
         break;
     }
-    tiles[y][x].tile.firstChild.style.transform = `rotate(${angle}deg)`;
+    karaId.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
   }
 }
 
@@ -77,7 +77,7 @@ export function tileAtPxLocation(x, y) {
 export function checkForRepeats(tileIndexX, tileIndexY, theoreticalObject) {
   const instances = [0, 0, 0, 0];
   if (!tiles[tileIndexY][tileIndexX]) {
-    return false;
+    return { status: false, msg: 'good' };
   };
   for (let i = 0; i< tiles[tileIndexY][tileIndexX].current.length; i++) {
     switch (tiles[tileIndexY][tileIndexX].current[i]) {
@@ -119,33 +119,40 @@ export function checkForRepeats(tileIndexX, tileIndexY, theoreticalObject) {
       objectsCount += 1;
     }
     if (instances[i] > 1) {
-      return true;
+      return { status: true, msg: 'multiple of same' };
     }
   };
-  if ((objectsCount > 1) && !(instances[0] === 1 && instances[1] === 0 && instances[2] === 1 && instances[3] === 0)) {
-    return true;
+  if ((objectsCount > 1) && (instances[0] === 1 && instances[1] === 0 && instances[2] === 0 && instances[3] === 1)) {
+    return { status: true, msg: 'log' };
   }
-  if ((objectsCount > 1) && (instances[0] === 1 && instances[1] === 1 && instances[2] === 0 && instances[3] === 0)) {
-    return 'shroom';
+  else if ((objectsCount > 1) && (instances[0] === 1 && instances[1] === 1 && instances[2] === 0 && instances[3] === 0)) {
+    return { status: true, msg: 'shroom' };
   }
-  return false;
+  else if ((objectsCount > 1) && !(instances[0] === 1 && instances[1] === 0 && instances[2] === 1 && instances[3] === 0)) {
+    return { status: true, msg: 'multi objects' };
+  }
+  return { status: false, msg: 'good' };
 }
 
 export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
   const tile = tiles[tileIndexY][tileIndexX].tile;
   if (tile) {
     if(operation === 'add' && object) {
-      if(checkForRepeats(tileIndexX, tileIndexY, object)){
+      console.log(checkForRepeats(tileIndexX, tileIndexY, object).status);
+      if(checkForRepeats(tileIndexX, tileIndexY, object).status){
         return false;
       }
       const img = document.createElement('img');
       img.classList.add('tile-object');
       img.style.height = `${boardLocatorInfo.tileSize}px`
+      let kara = false;
       switch (object) {
         case 'kara':
           img.src = './icons/kara.png';
           tiles[tileIndexY][tileIndexX].current.push(1);
+          img.id = 'kara';
           img.style.zIndex = 99;
+          kara = true;
           break;
         case 'mushroom':
           console.log('hi');
@@ -165,7 +172,7 @@ export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
           break;
       }
       img.addEventListener('click', () => {
-        changeKaraPlaced(false);
+        if(kara) changeKaraPlaced(false);
         tiles[tileIndexY][tileIndexX].current = [];
         while (tiles[tileIndexY][tileIndexX].tile.firstChild) {
           tiles[tileIndexY][tileIndexX].tile.removeChild(tiles[tileIndexY][tileIndexX].tile.firstChild);
@@ -174,6 +181,17 @@ export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
       img.style.height = `${boardLocatorInfo.tileSize -10}px`;
       console.log(tiles);
       tile.appendChild(img);
+    } else if (operation === 'removeKaraOnly') {
+      const karaId = tiles[tileIndexY][tileIndexX].tile.querySelector('#kara');
+      if(karaId){
+        tiles[tileIndexY][tileIndexX].tile.removeChild(karaId);
+      }
+      tiles[tileIndexY][tileIndexX].current = tiles[tileIndexY][tileIndexX].current.filter(item => item !== 1);
+    } else if (operation === 'remove') {
+        tiles[tileIndexY][tileIndexX].current = [];
+        while (tiles[tileIndexY][tileIndexX].tile.firstChild) {
+          tiles[tileIndexY][tileIndexX].tile.removeChild(tiles[tileIndexY][tileIndexX].tile.firstChild);
+        }
     }
   }
 };

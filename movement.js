@@ -1,4 +1,4 @@
-import { checkForRepeats, boardLocatorInfo, eraseAndRedraw, correctKaraRotation } from "./board.js";
+import { checkForRepeats, boardLocatorInfo, eraseAndRedraw, correctKaraRotation, objectAt } from "./board.js";
 import { getKaraX, getKaraY, getDirection, changeDirection, changeKaraLocation, karaPlaced } from "./kara.js";
 
 const upArrow = document.getElementById('upArrow');
@@ -19,6 +19,10 @@ rotateLeftArrow.addEventListener('click', () => {
 
 
 export const rotateRight = () => {
+  if(!karaPlaced) {
+    alert('Kara is not placed');
+    return false;
+  }
   const direction = getDirection();
   if(direction >= 3) {
     changeDirection(0);
@@ -29,6 +33,10 @@ export const rotateRight = () => {
 }
 
 export const rotateLeft = () => {
+  if(!karaPlaced) {
+    alert('Kara is not placed');
+    return false;
+  }
   const direction = getDirection();
   if(direction <= 0) {
     changeDirection(3);
@@ -71,6 +79,25 @@ export const moveKaraForward = () => {
   if(x > (boardLocatorInfo.width - 1) || x < 0 || y > (boardLocatorInfo.height - 1) || y < 0) {
     alert('Kara out of bounds');
     return false;
+  }
+
+  const repeats = checkForRepeats(x, y, 'kara');
+  if(repeats.status) {
+    if(repeats.msg === 'shroom') {
+      const shroomX = x + directionOffset[1] - directionOffset[3];
+      const shroomY = y - directionOffset[0] + directionOffset[2];
+      console.log(shroomX, shroomY);
+      if(!(shroomX > (boardLocatorInfo.width - 1) || shroomX < 0 || shroomY > (boardLocatorInfo.height - 1) || shroomY < 0) && objectAt(shroomX, shroomY).length === 0) {
+        eraseAndRedraw(x, y, shroomX, shroomY, 'mushroom');
+      } else {
+        alert('Kara cannot go there');
+        return false;
+      }
+    } else {
+      alert('Kara cannot go there');
+      return false;
+    }
+
   }
   console.log(x, y);
   eraseAndRedraw(getKaraX(), getKaraY(), x, y, 'kara');

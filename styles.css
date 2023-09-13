@@ -74,8 +74,6 @@ img {
   align-items: center;
 }
 .tile {
-  display: flex;
-  justify-content: center;
   position: relative;
   height: 100%;
   aspect-ratio: 1;
@@ -83,5 +81,8 @@ img {
   transform-origin: center;
 }
 .tile-object{
-  transform-origin: center center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
