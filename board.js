@@ -1,11 +1,30 @@
 const board = document.getElementById('board');
 const boardContainer = document.getElementById('board-container');
-import { changeKaraPlaced, getDirection } from "../kara.js";
+const resize = document.getElementById('resize');
+
+import { changeKaraPlaced, getDirection, changeDirection } from "../kara.js";
 import { getKaraX, getKaraY } from "./kara.js";
 
-const tiles = [];
+let tiles = [];
 
 let firstRow = null;
+
+resize.addEventListener('click', () => {
+  let x = prompt('Input X Size');
+  let y = prompt('Input Y Size');
+  if(x > 25) {
+    x = 25;
+  } else if (x < 5) {
+    x = 5;
+  }
+
+  if(y > 25) {
+    y = 25;
+  } else if (y < 5) {
+    y = 5;
+  }
+  updateBoard(y, x);
+})
 
 export const boardLocatorInfo = {
   x: 0,
@@ -197,7 +216,14 @@ export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
 };
 
 export function updateBoard(height, width){
-  const sizeLimit = Math.floor(height >= width ? boardContainer.offsetHeight / height : boardContainer.offsetWidth / width) - 7;
+  while (board.firstChild) {
+    board.removeChild(board.firstChild);
+  }
+  changeKaraPlaced(false);
+  changeDirection(1);
+  tiles = [];
+  console.log( boardContainer.offsetHeight / height, height, width);
+  const sizeLimit = Math.floor(parseInt(height) >= parseInt(width) ? boardContainer.offsetHeight / height : boardContainer.offsetWidth / width) - 7;
   console.log(sizeLimit);
   board.style.height = `${(sizeLimit + 2) * height}px`;
   board.style.width = `${(sizeLimit + 2) * width}px`;
