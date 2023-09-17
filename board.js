@@ -32,11 +32,12 @@ export const boardLocatorInfo = {
   height: 0,
   width: 0,
   tileSize: 0
-}
+};
 
 export function objectAt(x, y) {
   return tiles[y][x].current;
-}
+};
+
 export function eraseAndRedraw(targetX, targetY, newX, newY, newObject) {
   updateTile(targetX, targetY, newObject === 'kara' ? 'removeKaraOnly' : 'remove');
   updateTile(newX, newY, 'add', newObject);
@@ -181,6 +182,7 @@ export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
         case 'leaf':
           img.src = './icons/leaf.png';
           img.style.zIndex = 0;
+          img.id = 'leaf';
           tiles[tileIndexY][tileIndexX].current.push(3);
           break;
         case 'tree':
@@ -201,11 +203,17 @@ export function updateTile (tileIndexX, tileIndexY, operation, object = null) {
       console.log(tiles);
       tile.appendChild(img);
     } else if (operation === 'removeKaraOnly') {
-      const karaId = tiles[tileIndexY][tileIndexX].tile.querySelector('#kara');
-      if(karaId){
-        tiles[tileIndexY][tileIndexX].tile.removeChild(karaId);
-      }
-      tiles[tileIndexY][tileIndexX].current = tiles[tileIndexY][tileIndexX].current.filter(item => item !== 1);
+        const karaId = tiles[tileIndexY][tileIndexX].tile.querySelector('#kara');
+        if(karaId){
+          tiles[tileIndexY][tileIndexX].tile.removeChild(karaId);
+        }
+        tiles[tileIndexY][tileIndexX].current = tiles[tileIndexY][tileIndexX].current.filter(item => item !== 1);
+    } else if (operation === 'removeLeafOnly') {
+        const leafId = tiles[tileIndexY][tileIndexX].tile.querySelector('#leaf');
+        if(leafId){
+          tiles[tileIndexY][tileIndexX].tile.removeChild(leafId);
+        }
+        tiles[tileIndexY][tileIndexX].current = tiles[tileIndexY][tileIndexX].current.filter(item => item !== 3);
     } else if (operation === 'remove') {
         tiles[tileIndexY][tileIndexX].current = [];
         while (tiles[tileIndexY][tileIndexX].tile.firstChild) {

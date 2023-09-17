@@ -1,9 +1,11 @@
-import { checkForRepeats, boardLocatorInfo, eraseAndRedraw, correctKaraRotation, objectAt } from "./board.js";
-import { getKaraX, getKaraY, getDirection, changeDirection, changeKaraLocation, karaPlaced } from "./kara.js";
+import { checkForRepeats, boardLocatorInfo, eraseAndRedraw, correctKaraRotation, objectAt, updateTile } from "./board.js";
+import { getKaraX, getKaraY, getDirection, changeDirection, changeKaraLocation, karaPlaced, addLeaf, useLeaf, getLeaves} from "./kara.js";
 
 const upArrow = document.getElementById('upArrow');
 const rotateRightArrow = document.getElementById('rotateRightArrow');
 const rotateLeftArrow = document.getElementById('rotateLeftArrow');
+const pickUpButton = document.getElementById('pickUpButton');
+const putDownButton = document.getElementById('putDownButton');
 
 upArrow.addEventListener('click', () => {
   moveKaraForward();
@@ -11,11 +13,19 @@ upArrow.addEventListener('click', () => {
 
 rotateRightArrow.addEventListener('click', () => {
   rotateRight();
-})
+});
 
 rotateLeftArrow.addEventListener('click', () => {
   rotateLeft();
-})
+});
+
+pickUpButton.addEventListener('click', () => {
+  pickUpLeaf();
+});
+
+putDownButton.addEventListener('click', () => {
+  placeLeaf();
+});
 
 
 export const rotateRight = () => {
@@ -44,6 +54,38 @@ export const rotateLeft = () => {
     changeDirection(direction - 1);
   }
   correctKaraRotation();
+}
+
+export const pickUpLeaf = () => {
+  if(!karaPlaced) {
+    alert('Kara is not placed');
+    return false;
+  }
+  const objects = objectAt(getKaraX(), getKaraY());
+  if (!objects.includes(3)) {
+    alert('Kara is not on a leaf');
+    return false;
+  }
+  updateTile(getKaraX(), getKaraY(), 'removeLeafOnly');
+  addLeaf();
+}
+
+export const placeLeaf = () => {
+  if(!karaPlaced) {
+    alert('Kara is not placed');
+    return false;
+  }
+  if (getLeaves() <= 0) {
+    alert('Kara is holding no leaves.');
+    return false;
+  }
+  const objects = objectAt(getKaraX(), getKaraY());
+  if (objects.includes(3)) {
+    alert('Leaf is already placed where kara is.');
+    return false;
+  }
+  updateTile(getKaraX(), getKaraY(), 'add', 'leaf')
+  useLeaf();
 }
 
 export const moveKaraForward = () => {
